@@ -1,4 +1,4 @@
-package com.study.springbatch;
+package com.study.springbatch.dbSchema;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
