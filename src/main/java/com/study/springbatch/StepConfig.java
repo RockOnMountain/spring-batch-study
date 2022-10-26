@@ -1,21 +1,17 @@
 package com.study.springbatch;
 
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @RequiredArgsConstructor
 @Configuration
-public class JobConfig {
+public class StepConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
@@ -29,27 +25,16 @@ public class JobConfig {
 
     @Bean
     public Step step1() {
-        return stepBuilderFactory.get("step1").tasklet((contribution, chunkContext) -> {
 
-            this.printJobParameters(contribution, chunkContext);
+        /*
+            - Batch Job 을 구성하는 독립적인 하나의 단계로서 실제 배치 처리를 정의하고 컨트롤하는데 필요한 모든 정보를 가지고 있는 도메인 객체
+            - 단순한 단일 태스크 뿐 아니라 입력과 처리 그리고 출력과 관련된 복잡한 비즈니스 로직을 포함하는 모든 설정들을 담고 있다.
+            - 배치 작업을 어떻게 구성하고 실행할지 Job 의 세부 작업을 Task 기반으로 설정하고 명세해 놓은 객체
+            - 모든 Job 은 하나 이상의 step 으로 구성됨
+         */
 
-            System.out.println("step1 was executed");
-            return RepeatStatus.FINISHED;
-        }).build();
-    }
-
-
-    private void printJobParameters(StepContribution contribution, ChunkContext chunkContext) {
-
-        // 디버그 모드로 확인해 볼 것
-        JobParameters jobParameters = contribution.getStepExecution().getJobExecution().getJobParameters();
-        jobParameters.getString("name");
-        jobParameters.getLong("seq");
-        jobParameters.getDate("date");
-        jobParameters.getDouble("age");
-
-        // JobParameters를 확인할 수 있는 다른 방법 -> 위의 방법을 추천
-        Map<String, Object> jobParametersMap = chunkContext.getStepContext().getJobParameters();
+        // JobLauncher 에서 Job 을 실행하는 것부터 Step -> tasklet 실행(execute)까지 흐름을 한번 봐 볼 것!!!
+        return stepBuilderFactory.get("step1").tasklet(new CustomTasklet()).build();
     }
 
 
