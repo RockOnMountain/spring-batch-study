@@ -19,7 +19,7 @@ public class StepConfig {
 
     @Bean
     public Job job() {
-        return jobBuilderFactory.get("job").start(step1()).next(step2()).build();
+        return jobBuilderFactory.get("job").start(step1()).next(step2()).next(step3()).build();
     }
 
 
@@ -62,5 +62,30 @@ public class StepConfig {
             return RepeatStatus.FINISHED;
         }).build();
     }
+
+
+    @Bean
+    public Step step3() {
+
+        return stepBuilderFactory.get("step3").tasklet((contribution, chunkContext) -> {
+
+            /*
+                StepContribution
+
+                https://vitriol95.github.io/assets/img/batch/16.png
+
+                - 청크 프로세스의 변경 사항을 버퍼링 한 후 StepExecution 상태를 업데이트 하는 도메인 객체
+                - 청크 커밋 직전에 StepExecution 의 apply 메소드를 호출하여 상태를 업데이트 함
+                - ExitStatus 의 기본 종료코드 외에 사용자 정의 종료코드를 생성해서 적용할 수 있다.
+
+
+                보면 좋은 순서
+                TaskletStep(doInTransaction) -> StepExecution(createStepContribution) -> StepExecution(apply)
+            */
+
+            return RepeatStatus.FINISHED;
+        }).build();
+    }
+
 
 }
