@@ -22,7 +22,7 @@ public class JobRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         JobParameters jobParameters =
-                new JobParametersBuilder().addLong("seq", 1L)
+                new JobParametersBuilder().addLong("seq", 3L)
                         .toJobParameters();
 
         jobLauncher.run(job, jobParameters);
