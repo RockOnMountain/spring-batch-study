@@ -37,6 +37,7 @@ public class JobLauncherConfig {
             - 기본적인 JobExecutor 를 획득한 후 Client 에게 반환 -> 그 후 배치처리
             - HTTP 요청에 의한 배치처리에 적합 - 배치처리 시간이 길 경우 응답이 늦어지지 않도록 하기 위해
 
+        참고 이미지
         https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4358cfca-16a3-4fc8-ae9d-ab98f223620f/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221101T010324Z&X-Amz-Expires=86400&X-Amz-Signature=0c2eb41bf30a81ae96f39bd371fdb4b44153a5492dffc8b6b0c255139f253a03&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject
      */
 
