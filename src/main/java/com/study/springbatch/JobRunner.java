@@ -21,10 +21,10 @@ public class JobRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        JobParameters jobParameters =
-                new JobParametersBuilder().addLong("seq", 3L)
-                        .toJobParameters();
-
-        jobLauncher.run(job, jobParameters);
+//        JobParameters jobParameters =
+//                new JobParametersBuilder().addLong("seq", 1L)
+//                        .toJobParameters();
+//
+//        jobLauncher.run(job, jobParameters);
     }
 }
