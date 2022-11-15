@@ -27,60 +27,30 @@ public class StepBuilderConfig {
     @Bean
     public Job job() {
         return jobBuilderFactory.get("simpleJob")
-                .incrementer(new RunIdIncrementer())
-                .start(step2())
+                .start(step1())
+                .next(step2())
                 .build();
     }
-
-
-    @Bean
-    public Flow flow() {
-        FlowBuilder<Flow> flowFlowBuilder = new FlowBuilder<>("flow");
-        return flowFlowBuilder.start(step2()).end();
-    }
-
 
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1").tasklet((contribution, chunkContext) -> {
             System.out.println("step1 executed");
             return RepeatStatus.FINISHED;
-        }).build();
+        })
+                .allowStartIfComplete(true)
+                .build();
     }
 
 
     @Bean
     public Step step2() {
-        return stepBuilderFactory.get("step2")
-                .<String, String>chunk(10)
-                .reader(new ListItemReader<>(Arrays.asList("item1", "item2", "item3", "item4", "item5")))
-                .processor((ItemProcessor<String, String>) String::toUpperCase)
-                .writer(items -> {items.forEach(System.out::println);})
-                .build();
-    }
-
-
-    @Bean
-    public Step step3() {
-        return stepBuilderFactory.get("step3")
-                .partitioner(step1())
-                .gridSize(2)
-                .build();
-    }
-
-
-    @Bean
-    public Step step4() {
-        return stepBuilderFactory.get("step4")
-                .job(job())
-                .build();
-    }
-
-
-    @Bean
-    public Step step5() {
-        return stepBuilderFactory.get("step5")
-                .flow(flow())
+        return stepBuilderFactory.get("step2").tasklet((contribution, chunkContext) -> {
+            System.out.println("step2 executed");
+            throw new RuntimeException("step2 is failed");
+            // return RepeatStatus.FINISHED;
+        })
+                .startLimit(2)
                 .build();
     }
 
