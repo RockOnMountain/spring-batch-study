@@ -1,5 +1,6 @@
 package com.study.springbatch;
 
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -9,6 +10,8 @@ import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,9 +28,7 @@ public class StepBuilderConfig {
     public Job job() {
         return jobBuilderFactory.get("simpleJob")
                 .incrementer(new RunIdIncrementer())
-                .start(step1())
-                .next(step2())
-                .next(step3())
+                .start(step2())
                 .build();
     }
 
@@ -51,10 +52,10 @@ public class StepBuilderConfig {
     @Bean
     public Step step2() {
         return stepBuilderFactory.get("step2")
-                .<String, String>chunk(3)
-                .reader(() -> null)
-                .processor((ItemProcessor<String, String>) item -> null)
-                .writer(items -> {})
+                .<String, String>chunk(10)
+                .reader(new ListItemReader<>(Arrays.asList("item1", "item2", "item3", "item4", "item5")))
+                .processor((ItemProcessor<String, String>) String::toUpperCase)
+                .writer(items -> {items.forEach(System.out::println);})
                 .build();
     }
 
